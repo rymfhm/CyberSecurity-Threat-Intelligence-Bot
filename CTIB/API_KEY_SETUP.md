@@ -1,4 +1,4 @@
-# 🔑 Gemini API Key Setup Guide
+#  Gemini API Key Setup Guide
 
 ## Quick Setup Instructions
 
@@ -81,10 +81,10 @@ If your development server is running, restart it to load the new environment va
 
 ## Important Notes
 
-- ✅ **Never commit your `.env` file** - it's already in `.gitignore`
-- ✅ **Keep your API key secret** - don't share it publicly
-- ✅ **Free tier available** - Gemini offers generous free tier limits
-- ✅ **API key format** - Should start with `AIzaSy...`
+-  **Never commit your `.env` file** - it's already in `.gitignore`
+-  **Keep your API key secret** - don't share it publicly
+-  **Free tier available** - Gemini offers generous free tier limits
+-  **API key format** - Should start with `AIzaSy...`
 
 ## Troubleshooting
 
