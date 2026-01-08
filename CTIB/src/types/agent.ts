@@ -1,4 +1,4 @@
-import type { ThreatDocument, EnrichedThreatDocument } from "./document.js";
+import type { ThreatDocument, EnrichedThreatDocument } from "./document";
 
 export interface Agent {
   name: string;
@@ -39,6 +39,7 @@ export interface AnalystAssistantAgent extends Agent {
     };
   }): Promise<QueryResult>;
 }
+
 
 
 

@@ -1,4 +1,4 @@
-import type { EnrichedThreatDocument, DocumentChunk } from "../types/document.js";
+import type { EnrichedThreatDocument, DocumentChunk } from "../types/document";
 
 export interface ChunkOptions {
   chunkSize?: number;
@@ -78,6 +78,7 @@ export class TextChunker {
     };
   }
 }
+
 
 
 

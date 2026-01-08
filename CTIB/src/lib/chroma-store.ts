@@ -1,6 +1,6 @@
 import { ChromaClient } from "chromadb";
-import type { VectorStore } from "../types/vector-store.js";
-import type { DocumentChunk, SearchResult } from "../types/document.js";
+import type { VectorStore } from "../types/vector-store";
+import type { DocumentChunk, SearchResult } from "../types/document";
 
 export class ChromaVectorStore implements VectorStore {
   private client: ChromaClient;
@@ -8,15 +8,16 @@ export class ChromaVectorStore implements VectorStore {
   private collection: any = null;
 
   constructor() {
-    const url = process.env.CHROMADB_URL || "http://localhost:8000";
+    const url = process.env.CHROMADB_URL;
     this.collectionName = process.env.CHROMADB_COLLECTION_NAME || "threat_intelligence";
     
-    try {
-      this.client = new ChromaClient({ path: url });
-    } catch (error) {
-      // Fallback to in-memory if connection fails
-      console.warn("ChromaDB connection failed, using in-memory mode");
+    // Use in-memory mode if no URL is specified or if URL is explicitly set to empty
+    if (!url || url === "" || url === "undefined") {
+      console.log("Using ChromaDB in-memory mode (no server URL configured)");
+      // Create in-memory client - no path means in-memory
       this.client = new ChromaClient();
+    } else {
+      this.client = new ChromaClient({ path: url });
     }
   }
 
@@ -201,6 +202,7 @@ export class ChromaVectorStore implements VectorStore {
     return { count };
   }
 }
+
 
 
 

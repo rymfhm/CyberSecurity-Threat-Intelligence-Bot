@@ -1,4 +1,4 @@
-import type { DocumentChunk, SearchResult } from "./document.js";
+import type { DocumentChunk, SearchResult } from "./document";
 
 export interface VectorStore {
   /**
@@ -38,6 +38,7 @@ export interface VectorStore {
    */
   getStats(): Promise<{ count: number }>;
 }
+
 
 
 

@@ -1,4 +1,5 @@
-import { getOrchestrator } from "../lib/agent-orchestrator.js";
+import "dotenv/config";
+import { getOrchestrator } from "../lib/agent-orchestrator";
 
 async function main() {
   console.log("Starting ingestion pipeline...\n");
@@ -30,6 +31,7 @@ async function main() {
 }
 
 main();
+
 
 
 

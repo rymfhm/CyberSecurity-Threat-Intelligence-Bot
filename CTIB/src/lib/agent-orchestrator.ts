@@ -1,9 +1,9 @@
-import { ChromaVectorStore } from "./chroma-store.js";
-import { NVDIngestionAgent } from "../agents/ingestion-agent.js";
-import { LLMEnrichmentAgent } from "../agents/enrichment-agent.js";
-import { VectorIndexingAgent } from "../agents/indexing-agent.js";
-import { AnalystAssistantAgent } from "../agents/analyst-assistant-agent.js";
-import type { VectorStore } from "../types/vector-store.js";
+import { ChromaVectorStore } from "./chroma-store";
+import { NVDIngestionAgent } from "../agents/ingestion-agent";
+import { LLMEnrichmentAgent } from "../agents/enrichment-agent";
+import { VectorIndexingAgent } from "../agents/indexing-agent";
+import { AnalystAssistantAgent } from "../agents/analyst-assistant-agent";
+import type { VectorStore } from "../types/vector-store";
 
 /**
  * Lightweight orchestrator that manages agent lifecycle and coordination
@@ -89,6 +89,7 @@ export function getOrchestrator(): AgentOrchestrator {
   }
   return orchestratorInstance;
 }
+
 
 
 

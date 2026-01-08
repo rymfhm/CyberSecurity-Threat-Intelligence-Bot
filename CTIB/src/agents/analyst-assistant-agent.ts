@@ -1,18 +1,18 @@
-import type { QueryResult } from "../types/agent.js";
-import type { AnalystAssistantAgent as IAnalystAssistantAgent } from "../types/agent.js";
-import type { VectorStore } from "../types/vector-store.js";
-import { OpenAIClient } from "../lib/openai-client.js";
+import type { QueryResult } from "../types/agent";
+import type { AnalystAssistantAgent as IAnalystAssistantAgent } from "../types/agent";
+import type { VectorStore } from "../types/vector-store";
+import { GeminiClient } from "../lib/gemini-client";
 
 export class AnalystAssistantAgent implements IAnalystAssistantAgent {
   name = "Analyst Assistant Agent";
   description = "Handles user queries using RAG (Retrieval-Augmented Generation)";
 
   private vectorStore: VectorStore;
-  private openai: OpenAIClient;
+  private gemini: GeminiClient;
 
   constructor(vectorStore: VectorStore) {
     this.vectorStore = vectorStore;
-    this.openai = new OpenAIClient();
+    this.gemini = new GeminiClient();
   }
 
   async query(
@@ -27,7 +27,7 @@ export class AnalystAssistantAgent implements IAnalystAssistantAgent {
     }
   ): Promise<QueryResult> {
     // Generate embedding for the query
-    const queryEmbedding = await this.openai.generateEmbedding(question);
+    const queryEmbedding = await this.gemini.generateEmbedding(question);
 
     // Search vector store
     const searchResults = await this.vectorStore.search(queryEmbedding, {
@@ -59,7 +59,7 @@ Content: ${chunk.text}`;
       .join("\n\n");
 
     // Generate answer using LLM with context
-    const answer = await this.openai.chat([
+    const answer = await this.gemini.chat([
       {
         role: "system",
         content: `You are a cybersecurity threat intelligence analyst assistant. Answer questions based on the provided threat intelligence documents. Be accurate, cite specific CVE IDs and details when relevant, and always ground your answers in the provided context. If the context doesn't contain enough information, say so.`,
@@ -104,6 +104,7 @@ Content: ${chunk.text}`;
     };
   }
 }
+
 
 
 

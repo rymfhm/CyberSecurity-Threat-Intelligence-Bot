@@ -1,8 +1,8 @@
-import type { EnrichedThreatDocument } from "../types/document.js";
-import type { IndexingAgent } from "../types/agent.js";
-import type { VectorStore } from "../types/vector-store.js";
-import { TextChunker } from "../lib/text-chunker.js";
-import { OpenAIClient } from "../lib/openai-client.js";
+import type { EnrichedThreatDocument } from "../types/document";
+import type { IndexingAgent } from "../types/agent";
+import type { VectorStore } from "../types/vector-store";
+import { TextChunker } from "../lib/text-chunker";
+import { GeminiClient } from "../lib/gemini-client";
 
 export class VectorIndexingAgent implements IndexingAgent {
   name = "Vector Indexing Agent";
@@ -10,12 +10,12 @@ export class VectorIndexingAgent implements IndexingAgent {
 
   private vectorStore: VectorStore;
   private chunker: TextChunker;
-  private openai: OpenAIClient;
+  private gemini: GeminiClient;
 
   constructor(vectorStore: VectorStore) {
     this.vectorStore = vectorStore;
     this.chunker = new TextChunker({ chunkSize: 1000, chunkOverlap: 200 });
-    this.openai = new OpenAIClient();
+    this.gemini = new GeminiClient();
   }
 
   async index(document: EnrichedThreatDocument): Promise<void> {
@@ -28,7 +28,7 @@ export class VectorIndexingAgent implements IndexingAgent {
 
     // Generate embeddings for all chunks
     const texts = chunks.map((chunk) => chunk.text);
-    const embeddings = await this.openai.generateEmbeddings(texts);
+    const embeddings = await this.gemini.generateEmbeddings(texts);
 
     // Prepare chunks with embeddings
     const chunksWithEmbeddings = chunks.map((chunk, index) => ({
@@ -58,6 +58,7 @@ export class VectorIndexingAgent implements IndexingAgent {
     console.log("Indexing complete");
   }
 }
+
 
 
 

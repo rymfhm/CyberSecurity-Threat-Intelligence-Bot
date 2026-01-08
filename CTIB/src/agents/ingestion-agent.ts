@@ -1,6 +1,6 @@
 import axios from "axios";
-import type { ThreatDocument } from "../types/document.js";
-import type { IngestionAgent } from "../types/agent.js";
+import type { ThreatDocument } from "../types/document";
+import type { IngestionAgent } from "../types/agent";
 
 interface NVDCveItem {
   id: string;
@@ -216,6 +216,7 @@ export class NVDIngestionAgent implements IngestionAgent {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
+
 
 
 

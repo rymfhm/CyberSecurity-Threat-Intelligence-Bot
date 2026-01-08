@@ -6,7 +6,7 @@ A full-stack TypeScript application that acts as a Cybersecurity Threat Intellig
 
 - **CVE Ingestion**: Fetches and processes CVE data from NVD JSON feeds
 - **Document Enrichment**: LLM-based enrichment to add tags, threat types, and metadata
-- **Vector Search**: Semantic search using ChromaDB and OpenAI embeddings
+- **Vector Search**: Semantic search using ChromaDB and Gemini embeddings
 - **RAG Chat Interface**: Ask questions about cybersecurity threats with source citations
 - **Multi-Agent Architecture**: Modular agent system for ingestion, enrichment, indexing, and analysis
 
@@ -15,7 +15,7 @@ A full-stack TypeScript application that acts as a Cybersecurity Threat Intellig
 - **Framework**: Next.js 14 (App Router)
 - **Language**: TypeScript
 - **Vector DB**: ChromaDB
-- **LLM**: OpenAI (GPT-4o-mini, text-embedding-3-small)
+- **LLM**: Google Gemini (gemini-2.0-flash, text-embedding-004)
 - **Package Manager**: npm/pnpm
 
 ## Setup
@@ -29,8 +29,8 @@ A full-stack TypeScript application that acts as a Cybersecurity Threat Intellig
 
 2. **Configure environment**:
    ```bash
-   cp .env.example .env
-   # Edit .env and add your OPENAI_API_KEY
+   cp env.example .env
+   # Edit .env and add your GEMINI_API_KEY
    ```
 
 3. **Start development server**:

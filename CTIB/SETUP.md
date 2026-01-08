@@ -21,7 +21,7 @@ This is a **Cybersecurity Threat Intelligence Bot** built with TypeScript that u
 - **RAG (Retrieval-Augmented Generation)**: Combines semantic search with LLM to provide accurate, source-grounded answers
 - **Multi-Agent Architecture**: Modular agents handle ingestion, enrichment, indexing, and query processing
 - **Vector Database**: ChromaDB for semantic similarity search
-- **LLM Integration**: OpenAI for embeddings and text generation
+- **LLM Integration**: Google Gemini for embeddings and text generation
 
 The bot can answer questions about CVEs, vulnerabilities, and threat intelligence by searching through ingested security data.
 
@@ -40,10 +40,10 @@ Before you begin, ensure you have the following installed:
 2. **npm** or **pnpm** (comes with Node.js)
    - Verify: `npm --version` or `pnpm --version`
 
-3. **OpenAI API Key**
-   - Sign up at [platform.openai.com](https://platform.openai.com/)
-   - Create an API key in your account settings
-   - You'll need credits on your OpenAI account
+3. **Gemini API Key**
+   - Sign up at [aistudio.google.com](https://aistudio.google.com/)
+   - Create an API key in your account settings (Get API key)
+   - Free tier available with generous limits
 
 ### Optional (for ChromaDB server)
 
@@ -75,7 +75,7 @@ npm install
 This will install all required packages:
 - Next.js (React framework)
 - ChromaDB client
-- OpenAI SDK
+- Google Generative AI SDK
 - TypeScript and development tools
 
 **Expected time**: 2-5 minutes depending on your internet connection.
@@ -91,15 +91,12 @@ This will install all required packages:
 2. Open `.env` in a text editor and fill in your values:
 
 ```env
-# REQUIRED: Your OpenAI API key
-OPENAI_API_KEY=sk-your-actual-api-key-here
-
-# Optional: Override OpenAI base URL (default: https://api.openai.com/v1)
-OPENAI_BASE_URL=https://api.openai.com/v1
+# REQUIRED: Your Gemini API key
+GEMINI_API_KEY=your_gemini_api_key_here
 
 # Optional: Choose your models (defaults shown)
-OPENAI_MODEL=gpt-4o-mini
-OPENAI_EMBEDDING_MODEL=text-embedding-3-small
+GEMINI_MODEL=gemini-2.0-flash
+GEMINI_EMBEDDING_MODEL=text-embedding-004
 
 # Optional: ChromaDB configuration (only if running Docker)
 CHROMADB_URL=http://localhost:8000
@@ -115,18 +112,18 @@ NVD_API_KEY=your-nvd-api-key-here
 
 ## Configuration
 
-### OpenAI Models
+### Gemini Models
 
 You can customize which models to use:
 
-- **OPENAI_MODEL**: The LLM for generating answers
-  - Recommended: `gpt-4o-mini` (cost-effective, fast)
-  - Alternative: `gpt-4o` (more capable, more expensive)
-  - Alternative: `gpt-3.5-turbo` (cheaper, less capable)
+- **GEMINI_MODEL**: The LLM for generating answers
+  - Recommended: `gemini-2.0-flash` (latest, fast, cost-effective)
+  - Alternative: `gemini-1.5-pro` (more capable, better for complex queries)
+  - Alternative: `gemini-1.5-flash` (previous version, still available)
 
-- **OPENAI_EMBEDDING_MODEL**: For generating embeddings
-  - Recommended: `text-embedding-3-small` (cost-effective)
-  - Alternative: `text-embedding-3-large` (better quality, more expensive)
+- **GEMINI_EMBEDDING_MODEL**: For generating embeddings
+  - Recommended: `text-embedding-004` (Google's latest embedding model)
+  - This is the standard embedding model for Gemini
 
 ### ChromaDB Setup (Optional)
 
@@ -261,7 +258,7 @@ Vector Database (Ready for Search)
 
 1. **User asks a question** (e.g., "What critical vulnerabilities affected Windows?")
 
-2. **Query Embedding**: The question is converted to a vector using OpenAI's embedding model
+2. **Query Embedding**: The question is converted to a vector using Gemini's embedding model
 
 3. **Semantic Search**: ChromaDB finds the most similar document chunks using cosine similarity
 
@@ -306,7 +303,7 @@ The application uses a **modular agent architecture** inspired by CrewAI pattern
 
 **What it does**:
 - Takes raw `ThreatDocument` objects
-- Sends each document to OpenAI with a specialized prompt
+- Sends each document to Gemini with a specialized prompt
 - LLM analyzes and adds:
   - **Tags**: e.g., `["rce", "privilege_escalation", "sql_injection"]`
   - **Threat Type**: e.g., "RCE", "Privilege Escalation", "DoS"
@@ -327,8 +324,8 @@ The application uses a **modular agent architecture** inspired by CrewAI pattern
    - Why? Embeddings work better on smaller, focused text
    - Overlap ensures context isn't lost at boundaries
 
-2. **Embedding Generation**: Converts each chunk to a vector using OpenAI embeddings
-   - Each chunk becomes a 1536-dimensional vector (for `text-embedding-3-small`)
+2. **Embedding Generation**: Converts each chunk to a vector using Gemini embeddings
+   - Each chunk becomes a vector using Google's `text-embedding-004` model
 
 3. **Vector Storage**: Stores chunks + embeddings + metadata in ChromaDB
    - Metadata includes: title, severity, products, tags, etc. (for filtering)
@@ -498,11 +495,11 @@ Health check endpoint.
 
 ## Troubleshooting
 
-### Issue: "OPENAI_API_KEY environment variable is required"
+### Issue: "GEMINI_API_KEY environment variable is required"
 
 **Solution**: 
 - Make sure you created a `.env` file
-- Verify the key is set: `OPENAI_API_KEY=sk-...`
+- Verify the key is set: `GEMINI_API_KEY=your-actual-api-key-here`
 - Restart the dev server after changing `.env`
 
 ### Issue: "Rate limited by NVD API"
@@ -531,13 +528,13 @@ Health check endpoint.
 
 **Possible causes**:
 - Large number of CVEs ingested (more chunks to search)
-- OpenAI API rate limits
+- Gemini API rate limits
 - Network latency
 
 **Solutions**:
 - Reduce `maxResults` in queries
-- Use faster models (`gpt-4o-mini` instead of `gpt-4o`)
-- Check OpenAI API status
+- Use faster models (`gemini-2.0-flash` instead of `gemini-1.5-pro`)
+- Check Gemini API status
 
 ### Issue: TypeScript errors
 
@@ -571,7 +568,7 @@ CTIB/
 │   │   ├── indexing-agent.ts
 │   │   └── analyst-assistant-agent.ts
 │   ├── lib/                 # Core libraries
-│   │   ├── openai-client.ts
+│   │   ├── gemini-client.ts
 │   │   ├── chroma-store.ts
 │   │   ├── text-chunker.ts
 │   │   └── agent-orchestrator.ts
@@ -634,7 +631,7 @@ CTIB/
 ## Support & Resources
 
 - **NVD API Docs**: [nvd.nist.gov/developers](https://nvd.nist.gov/developers)
-- **OpenAI API Docs**: [platform.openai.com/docs](https://platform.openai.com/docs)
+- **Gemini API Docs**: [ai.google.dev/docs](https://ai.google.dev/docs)
 - **ChromaDB Docs**: [docs.trychroma.com](https://docs.trychroma.com)
 - **Next.js Docs**: [nextjs.org/docs](https://nextjs.org/docs)
 
@@ -647,4 +644,5 @@ This is a thesis project. Use as needed for educational purposes.
 ---
 
 **Happy Threat Hunting! 🛡️**
+
 

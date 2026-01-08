@@ -1,22 +1,22 @@
-import type { ThreatDocument, EnrichedThreatDocument } from "../types/document.js";
-import type { EnrichmentAgent } from "../types/agent.js";
-import { OpenAIClient } from "../lib/openai-client.js";
+import type { ThreatDocument, EnrichedThreatDocument } from "../types/document";
+import type { EnrichmentAgent } from "../types/agent";
+import { GeminiClient } from "../lib/gemini-client";
 
 export class LLMEnrichmentAgent implements EnrichmentAgent {
   name = "LLM Enrichment Agent";
   description = "Enriches threat documents using LLM to add tags, threat types, and inferred products";
 
-  private openai: OpenAIClient;
+  private gemini: GeminiClient;
 
   constructor() {
-    this.openai = new OpenAIClient();
+    this.gemini = new GeminiClient();
   }
 
   async enrich(document: ThreatDocument): Promise<EnrichedThreatDocument> {
     const prompt = this.buildEnrichmentPrompt(document);
     
     try {
-      const response = await this.openai.chat([
+      const response = await this.gemini.chat([
         {
           role: "system",
           content: "You are a cybersecurity expert that analyzes threat intelligence documents. Respond with valid JSON only.",
@@ -123,6 +123,7 @@ Only respond with valid JSON, no additional text.`;
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
+
 
 
 
